@@ -1,0 +1,10 @@
+<?xml version="1.0" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="sendinblue_api.client" class="SendinBlue\Client\ApiClient" public="false" abstract="true" />
+        <service id="sendinblue_api.client.configuration" class="SendinBlue\Client\Configuration" public="false" abstract="true" />
+    </services>
+</container>

@@ -1,0 +1,30 @@
+{
+  "name": "sendinblue/api-bundle",
+  "description": "Symfony bundle for sendinblue/api-v3-sdk",
+  "type": "symfony-bundle",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "SendinBlue Developers",
+      "email": "contact@sendinblue.com",
+      "homepage": "https://www.sendinblue.com/"
+    }
+  ],
+  "require": {
+    "sendinblue/api-v3-sdk": "^2",
+    "symfony/config": "^2|^3",
+    "symfony/dependency-injection": "^2|^3",
+    "symfony/http-kernel": "^2|^3"
+  },
+  "require-dev": {
+    "friendsofphp/php-cs-fixer": "^2",
+    "phpunit/phpunit": "^6",
+    "symfony/framework-bundle": "^2|^3"
+  },
+  "autoload": {
+    "psr-4": { "SendinBlue\\Bundle\\ApiBundle\\" : "" },
+    "exclude-from-classmap": [
+      "/Tests/"
+    ]
+  }
+}

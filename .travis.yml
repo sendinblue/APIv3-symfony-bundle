@@ -1,0 +1,22 @@
+language: php
+
+php:
+    - 7
+
+env:
+    - SYMFONY_VERSION=2.*
+    - SYMFONY_VERSION=3.*
+
+cache:
+    directories:
+        - $HOME/.composer/cache
+
+install:
+    - composer require --dev --no-update symfony/framework-bundle:${SYMFONY_VERSION}
+    - composer install
+
+script:
+    - vendor/bin/php-cs-fixer fix --dry-run --diff
+    - phpunit --coverage-text
+
+sudo: false

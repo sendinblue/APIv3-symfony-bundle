@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<xsd:schema xmlns="http://sendinblue.com/schema/dic/api"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    targetNamespace="http://sendinblue.com/schema/dic/api"
+    elementFormDefault="qualified">
+
+    <xsd:element name="config" type="config" />
+
+    <xsd:complexType name="config">
+        <xsd:choice minOccurs="0" maxOccurs="unbounded">
+            <xsd:element name="client" type="client" />
+        </xsd:choice>
+
+        <xsd:attribute name="default-client" type="xsd:string" />
+    </xsd:complexType>
+
+    <xsd:complexType name="client">
+        <xsd:sequence>
+            <xsd:element name="key" type="xsd:string" />
+            <xsd:choice minOccurs="0" maxOccurs="unbounded">
+                <xsd:element name="endpoint" type="endpoint" />
+            </xsd:choice>
+        </xsd:sequence>
+
+        <xsd:attribute name="name" type="xsd:string" use="required" />
+    </xsd:complexType>
+
+    <xsd:simpleType name="endpoint">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="account"/>
+            <xsd:enumeration value="attributes"/>
+            <xsd:enumeration value="contacts"/>
+            <xsd:enumeration value="email_campaigns"/>
+            <xsd:enumeration value="folders"/>
+            <xsd:enumeration value="lists"/>
+            <xsd:enumeration value="process"/>
+            <xsd:enumeration value="reseller"/>
+            <xsd:enumeration value="senders"/>
+            <xsd:enumeration value="sms_campaigns"/>
+            <xsd:enumeration value="smtp"/>
+            <xsd:enumeration value="transactional_sms"/>
+            <xsd:enumeration value="webhooks"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+</xsd:schema>

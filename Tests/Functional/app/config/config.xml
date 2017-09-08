@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns:sib-api="http://sendinblue.com/schema/dic/api"
+           xsi:schemaLocation="http://sendinblue.com/schema/dic/api
+        http://sendinblue.com/schema/dic/api/api-1.0.xsd">
+
+    <sib-api:config>
+        <sib-api:client name="default">
+            <sib-api:key>key</sib-api:key>
+            <sib-api:endpoint>account</sib-api:endpoint>
+        </sib-api:client>
+    </sib-api:config>
+</container>
