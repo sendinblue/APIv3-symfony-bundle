@@ -5,7 +5,6 @@ namespace SendinBlue\Bundle\ApiBundle\DependencyInjection;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
-use Symfony\Component\DependencyInjection\DefinitionDecorator;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
@@ -43,8 +42,10 @@ class SendinBlueApiExtension extends Extension
             $config['default_client'] = reset($keys);
         }
 
+        $onlyClient = 1 === count($config['clients']);
+
         foreach ($config['clients'] as $name => $client) {
-            $this->loadClient($name, $config['default_client'] === $name, $client, $container);
+            $this->loadClient($name, $config['default_client'] === $name, $onlyClient, $client, $container);
         }
     }
 
@@ -83,22 +84,25 @@ class SendinBlueApiExtension extends Extension
     /**
      * @param string           $name
      * @param bool             $default
+     * @param bool             $only
      * @param array            $client
      * @param ContainerBuilder $container
      */
-    private function loadClient($name, $default, array $client, ContainerBuilder $container)
+    private function loadClient($name, $default, $only, array $client, ContainerBuilder $container)
     {
+        $definitionClassName = $this->getDefinitionClassname();
+
         $configurationService = sprintf('sendinblue_api.%s_client.configuration', $name);
         $configuration = $container->setDefinition(
             $configurationService,
-            new DefinitionDecorator('sendinblue_api.client.configuration')
+            new $definitionClassName('sendinblue_api.client.configuration')
         );
 
         $configuration->addMethodCall('setApiKey', ['api-key', $client['key']]);
 
         $clientService = sprintf('sendinblue_api.%s_client', $name);
         $container
-            ->setDefinition($clientService, new DefinitionDecorator('sendinblue_api.client'))
+            ->setDefinition($clientService, new $definitionClassName('sendinblue_api.client'))
             ->setArguments([new Reference($configurationService)])
         ;
 
@@ -111,11 +115,23 @@ class SendinBlueApiExtension extends Extension
             ));
 
             if ($default) {
-                $container->setAlias(
-                    sprintf('sendinblue_api.%s_endpoint', $endpoint),
-                    $endpointService
-                );
+                $container->setAlias(sprintf('sendinblue_api.%s_endpoint', $endpoint), $endpointService);
+            }
+
+            if ($only) {
+                $container->setAlias(self::$MAPPING[$endpoint], $endpointService);
             }
         }
+    }
+
+    /**
+     * @return string
+     */
+    private function getDefinitionClassname()
+    {
+        return class_exists('Symfony\Component\DependencyInjection\ChildDefinition')
+            ? 'Symfony\Component\DependencyInjection\ChildDefinition'
+            : 'Symfony\Component\DependencyInjection\DefinitionDecorator'
+        ;
     }
 }

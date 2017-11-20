@@ -1,22 +1,36 @@
 language: php
 
 php:
-    - 7
+    - 5.4
+    - 5.5
+    - 5.6
+    - 7.0
+    - 7.1
+    - 7.2
+    - hhvm
 
 env:
-    - SYMFONY_VERSION=2.*
-    - SYMFONY_VERSION=3.*
+    - SYMFONY_VERSION=2.* PHPUNIT_VERSION=4.*
+    - SYMFONY_VERSION=3.* PHPUNIT_VERSION=5.*
+
+matrix:
+    exclude:
+        - php: 5.4
+          env: SYMFONY_VERSION=3.* PHPUNIT_VERSION=5.*
+
+        - php: 5.5
+          env: SYMFONY_VERSION=3.* PHPUNIT_VERSION=5.*
 
 cache:
     directories:
         - $HOME/.composer/cache
 
 install:
-    - composer require --dev --no-update symfony/framework-bundle:${SYMFONY_VERSION}
+    - composer require --dev --no-update symfony/framework-bundle:${SYMFONY_VERSION} phpunit/phpunit:${PHPUNIT_VERSION}
     - composer install
 
 script:
     - vendor/bin/php-cs-fixer fix --dry-run --diff
-    - phpunit --coverage-text
+    - vendor/bin/phpunit --coverage-text
 
 sudo: false
