@@ -1,6 +1,6 @@
 # sendinblue/api-bundle
 
-This bundle integrates [`sendinblue/api-v3-sdk`](https://github.com/sendinblue/APIv3-php-library) into Symfony 2 and 3.
+This bundle integrates [`sendinblue/api-v3-sdk`](https://github.com/sendinblue/APIv3-php-library) into Symfony.
 
 ## Installation
 
