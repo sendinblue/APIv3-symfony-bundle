@@ -3,8 +3,8 @@
 namespace SendinBlue\Bundle\ApiBundle\Tests\Functional\app;
 
 use SendinBlue\Bundle\ApiBundle\SendinBlueApiBundle;
-use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Config\Loader\LoaderInterface;
+use Symfony\Component\HttpKernel\Kernel;
 
 class AppKernel extends Kernel
 {
@@ -18,7 +18,7 @@ class AppKernel extends Kernel
      */
     public function __construct($config)
     {
-        parent::__construct(uniqid(), false);
+        parent::__construct(\uniqid(), false);
 
         $this->config = $config;
     }
@@ -46,7 +46,7 @@ class AppKernel extends Kernel
      */
     public function getCacheDir()
     {
-        return sys_get_temp_dir().'/sendinblue/api-bundle/cache';
+        return \sys_get_temp_dir().'/sendinblue/api-bundle/cache';
     }
 
     /**
@@ -54,7 +54,7 @@ class AppKernel extends Kernel
      */
     public function getLogDir()
     {
-        return sys_get_temp_dir().'/sendinblue/api-bundle/logs';
+        return \sys_get_temp_dir().'/sendinblue/api-bundle/logs';
     }
 
     /**

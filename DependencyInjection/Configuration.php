@@ -19,9 +19,9 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->beforeNormalization()
                 ->ifTrue(function ($configuration) {
-                    return is_array($configuration)
-                        && !array_key_exists('clients', $configuration)
-                        && !array_key_exists('client', $configuration)
+                    return \is_array($configuration)
+                        && !\array_key_exists('clients', $configuration)
+                        && !\array_key_exists('client', $configuration)
                     ;
                 })
                 ->then(function ($configuration) {
@@ -33,7 +33,7 @@ class Configuration implements ConfigurationInterface
 
                     $clientConfiguration = [];
                     foreach (['key', 'endpoints'] as $clientKey) {
-                        if (array_key_exists($clientKey, $configuration)) {
+                        if (\array_key_exists($clientKey, $configuration)) {
                             $clientConfiguration[$clientKey] = $configuration[$clientKey];
                             unset($configuration[$clientKey]);
                         }

@@ -32,17 +32,17 @@ class SendinBlueApiExtension extends Extension
      */
     public function load(array $config, ContainerBuilder $container)
     {
-        $loader = new XmlFileLoader($container, new FileLocator(dirname(__DIR__).'/Resources/config'));
+        $loader = new XmlFileLoader($container, new FileLocator(\dirname(__DIR__).'/Resources/config'));
         $loader->load('services.xml');
 
         $config = $this->processConfiguration(new Configuration(), $config);
 
         if (empty($config['default_client'])) {
-            $keys = array_keys($config['clients']);
-            $config['default_client'] = reset($keys);
+            $keys = \array_keys($config['clients']);
+            $config['default_client'] = \reset($keys);
         }
 
-        $onlyClient = 1 === count($config['clients']);
+        $onlyClient = 1 === \count($config['clients']);
 
         foreach ($config['clients'] as $name => $client) {
             $this->loadClient($name, $config['default_client'] === $name, $onlyClient, $client, $container);
@@ -62,7 +62,7 @@ class SendinBlueApiExtension extends Extension
      */
     public function getXsdValidationBasePath()
     {
-        return dirname(__DIR__).'/Resources/config/schema';
+        return \dirname(__DIR__).'/Resources/config/schema';
     }
 
     /**
@@ -78,7 +78,7 @@ class SendinBlueApiExtension extends Extension
      */
     public static function getEndpoints()
     {
-        return array_keys(self::$MAPPING);
+        return \array_keys(self::$MAPPING);
     }
 
     /**
@@ -92,7 +92,7 @@ class SendinBlueApiExtension extends Extension
     {
         $definitionClassName = $this->getDefinitionClassname();
 
-        $configurationService = sprintf('sendinblue_api.%s_client.configuration', $name);
+        $configurationService = \sprintf('sendinblue_api.%s_client.configuration', $name);
         $configuration = $container->setDefinition(
             $configurationService,
             new $definitionClassName('sendinblue_api.client.configuration')
@@ -100,14 +100,14 @@ class SendinBlueApiExtension extends Extension
 
         $configuration->addMethodCall('setApiKey', ['api-key', $client['key']]);
 
-        $clientService = sprintf('sendinblue_api.%s_client', $name);
+        $clientService = \sprintf('sendinblue_api.%s_client', $name);
         $container
             ->setDefinition($clientService, new $definitionClassName('sendinblue_api.client'))
             ->setArguments([new Reference($configurationService)])
         ;
 
         foreach ($client['endpoints'] as $endpoint) {
-            $endpointService = sprintf('sendinblue_api.%s_client.%s_endpoint', $name, $endpoint);
+            $endpointService = \sprintf('sendinblue_api.%s_client.%s_endpoint', $name, $endpoint);
 
             $container->setDefinition($endpointService, new Definition(
                 self::$MAPPING[$endpoint],
@@ -115,7 +115,7 @@ class SendinBlueApiExtension extends Extension
             ));
 
             if ($default) {
-                $container->setAlias(sprintf('sendinblue_api.%s_endpoint', $endpoint), $endpointService);
+                $container->setAlias(\sprintf('sendinblue_api.%s_endpoint', $endpoint), $endpointService);
             }
 
             if ($only) {
@@ -129,7 +129,7 @@ class SendinBlueApiExtension extends Extension
      */
     private function getDefinitionClassname()
     {
-        return class_exists('Symfony\Component\DependencyInjection\ChildDefinition')
+        return \class_exists('Symfony\Component\DependencyInjection\ChildDefinition')
             ? 'Symfony\Component\DependencyInjection\ChildDefinition'
             : 'Symfony\Component\DependencyInjection\DefinitionDecorator'
         ;
