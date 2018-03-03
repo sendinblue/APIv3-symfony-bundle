@@ -3,6 +3,7 @@
 namespace SendinBlue\Bundle\ApiBundle\DependencyInjection;
 
 use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\Alias;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
@@ -109,13 +110,19 @@ class SendinBlueApiExtension extends Extension
         foreach ($client['endpoints'] as $endpoint) {
             $endpointService = \sprintf('sendinblue_api.%s_client.%s_endpoint', $name, $endpoint);
 
-            $container->setDefinition($endpointService, new Definition(
-                self::$MAPPING[$endpoint],
-                [new Reference($clientService)]
-            ));
+            $container
+                ->setDefinition(
+                    $endpointService,
+                    new Definition(self::$MAPPING[$endpoint], [new Reference($clientService)])
+                )
+                ->setPublic(true)
+            ;
 
             if ($default) {
-                $container->setAlias(\sprintf('sendinblue_api.%s_endpoint', $endpoint), $endpointService);
+                $container->setAlias(
+                    \sprintf('sendinblue_api.%s_endpoint', $endpoint),
+                    new Alias($endpointService, true)
+                );
             }
 
             if ($only) {
