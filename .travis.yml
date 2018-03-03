@@ -10,27 +10,53 @@ php:
     - hhvm
 
 env:
-    - SYMFONY_VERSION=2.* PHPUNIT_VERSION=4.*
-    - SYMFONY_VERSION=3.* PHPUNIT_VERSION=5.*
+    - SYMFONY_VERSION=2.*
+    - SYMFONY_VERSION=3.*
+    - SYMFONY_VERSION=4.*
 
 matrix:
     exclude:
         - php: 5.4
-          env: SYMFONY_VERSION=3.* PHPUNIT_VERSION=5.*
+          env: SYMFONY_VERSION=3.*
 
         - php: 5.5
-          env: SYMFONY_VERSION=3.* PHPUNIT_VERSION=5.*
+          env: SYMFONY_VERSION=3.*
+
+        - php: 5.4
+          env: SYMFONY_VERSION=4.*
+
+        - php: 5.5
+          env: SYMFONY_VERSION=4.*
+
+        - php: 5.6
+          env: SYMFONY_VERSION=4.*
+
+        - php: 7.0
+          env: SYMFONY_VERSION=4.*
+
+        - php: hhvm
+          env: SYMFONY_VERSION=4.*
 
 cache:
     directories:
         - $HOME/.composer/cache
 
 install:
-    - composer require --dev --no-update symfony/framework-bundle:${SYMFONY_VERSION} phpunit/phpunit:${PHPUNIT_VERSION}
+    - composer require --dev --no-update symfony/framework-bundle:${SYMFONY_VERSION} phpunit/phpunit
     - composer install
 
 script:
-    - vendor/bin/php-cs-fixer fix --dry-run --diff
     - vendor/bin/phpunit --coverage-text
+
+jobs:
+  include:
+    - stage: lint
+      script: vendor/bin/php-cs-fixer fix --dry-run --diff
+      php: 7.2
+      env: SYMFONY_VERSION=4.*
+
+stages:
+  - lint
+  - test
 
 sudo: false
