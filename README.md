@@ -1,5 +1,6 @@
 NOTE:
 This package has been deprecated. As an alternative, [`sendinblue/api-v3-sdk`](https://github.com/sendinblue/APIv3-php-library) can be used to integrate [Sendinblue APIs](https://developers.sendinblue.com/reference).
+
 **This package will be archived on 31st October 2020 at 00:00:00 UTC.**
 
 # sendinblue/api-bundle
